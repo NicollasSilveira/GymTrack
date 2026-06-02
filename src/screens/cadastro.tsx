@@ -1,4 +1,16 @@
 import { useState } from "react";
+import { Alert } from "react-native";
+
+import {
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+
+import {
+  doc,
+  setDoc,
+} from "firebase/firestore";
+
+import { auth, db } from "../firebase/config";
 
 import {
   View,
@@ -12,39 +24,139 @@ import {
 export default function TelaCadastro({ navigation }: any) {
 
   const [firstName, setFirstName] = useState("");
+
   const [lastName, setLastName] = useState("");
 
   const [email, setEmail] = useState("");
 
   const [phone, setPhone] = useState("");
 
-  const [city, setCity] = useState("");
-
-  const [state, setState] = useState("");
-
   const [password, setPassword] = useState("");
 
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  function handleRegister() {
+  function formatPhone(text: string) {
 
-    if (password !== confirmPassword) {
-      return alert("As senhas não coincidem");
-    }
+  const cleaned = text.replace(/\D/g, "");
 
-    console.log({
-      firstName,
-      lastName,
-      email,
-      phone,
-      city,
-      state,
-      password,
-    });
+  if (cleaned.length <= 2) {
+    return `(${cleaned}`;
+  }
+
+  if (cleaned.length <= 7) {
+    return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2)}`;
+  }
+
+  return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7, 11)}`;
+
+}
+
+  async function handleRegister() {
+
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !phone ||
+    !password ||
+    !confirmPassword
+  ) {
+
+    console.log(
+      "Campos obrigatórios",
+      "Preencha todos os campos."
+    );
+
+    return;
+  }
+
+  if (firstName.trim().length < 3) {
+    console.log(
+      "Nome inválido",
+      "O nome deve ter pelo menos 3 caracteres."
+    );
+    return;
+  }
+
+  if (lastName.trim().length < 3) {
+    console.log(
+      "Nome inválido",
+      "O sobrenome deve ter pelo menos 3 caracteres."
+    );
+    return;
+  }
+
+  if (!email.includes("@")) {
+
+    console.log(
+      "E-mail inválido",
+      "Digite um e-mail válido."
+    );
+
+    return;
+  }
+
+  if (password.length < 6) {
+
+    console.log(
+      "Senha inválida",
+      "A senha deve possuir pelo menos 6 caracteres."
+    );
+
+    return;
+  }
+
+  if (password !== confirmPassword) {
+
+    console.log(
+      "Erro",
+      "As senhas não coincidem."
+    );
+
+    return;
+  }
+
+  try {
+
+    const userCredential =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    const uid = userCredential.user.uid;
+
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        firstName,
+        lastName,
+        email,
+        phone: phone.replace(/\D/g, ""),
+        createdAt: new Date(),
+      }
+    );
+
+    console.log(
+      "Sucesso",
+      "Conta criada com sucesso!"
+    );
 
     navigation.navigate("Login");
 
+  } catch (error: any) {
+
+    console.log(error);
+
+    console.log(
+      "Erro",
+      error.message
+    );
+
   }
+
+}
 
   return (
 
@@ -70,7 +182,10 @@ export default function TelaCadastro({ navigation }: any) {
         placeholderTextColor="#777"
         style={styles.input}
         value={firstName}
-        onChangeText={setFirstName}
+        onChangeText={(text) => {
+          const valorFormatado = text.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+          setFirstName(valorFormatado);
+        }}
       />
 
       <TextInput
@@ -78,7 +193,10 @@ export default function TelaCadastro({ navigation }: any) {
         placeholderTextColor="#777"
         style={styles.input}
         value={lastName}
-        onChangeText={setLastName}
+        onChangeText={(text) => {
+          const valorFormatado = text.replace(/[^a-zA-ZÀ-ÿ\s]/sg, "");
+          setLastName(valorFormatado);
+        }}
       />
 
       <TextInput
@@ -97,23 +215,10 @@ export default function TelaCadastro({ navigation }: any) {
         style={styles.input}
         keyboardType="phone-pad"
         value={phone}
-        onChangeText={setPhone}
-      />
-
-      <TextInput
-        placeholder="Cidade"
-        placeholderTextColor="#777"
-        style={styles.input}
-        value={city}
-        onChangeText={setCity}
-      />
-
-      <TextInput
-        placeholder="Estado"
-        placeholderTextColor="#777"
-        style={styles.input}
-        value={state}
-        onChangeText={setState}
+        maxLength={14}
+        onChangeText={(text) => {
+          setPhone(formatPhone(text));
+        }}
       />
 
       <TextInput
