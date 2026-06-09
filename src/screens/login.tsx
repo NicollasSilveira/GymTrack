@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Alert } from "react-native";
 
 import {
   View,
@@ -9,21 +10,75 @@ import {
   Image,
 } from "react-native";
 
+import {
+  signInWithEmailAndPassword
+} from "firebase/auth";
+
+import { auth } from "../firebase/config";
+
 export default function LoginScreen({ navigation }: any) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin() {
+async function handleLogin() {
 
-    console.log({
-      email,
-      password,
-    });
+  if (!email || !password) {
+
+    Alert.alert(
+      "Campos obrigatórios",
+      "Preencha e-mail e senha."
+    );
+
+    return;
+  }
+
+  try {
+
+    const userCredential =
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    console.log(userCredential.user);
+
+    Alert.alert(
+      "Sucesso",
+      "Login realizado com sucesso!"
+    );
 
     navigation.navigate("Home");
 
+  } catch (error: any) {
+
+    switch (error.code) {
+
+      case "auth/invalid-email":
+        Alert.alert(
+          "E-mail inválido",
+          "Digite um e-mail válido."
+        );
+        break;
+
+      case "auth/invalid-credential":
+        Alert.alert(
+          "Login inválido",
+          "E-mail ou senha incorretos."
+        );
+        break;
+
+      default:
+        Alert.alert(
+          "Erro",
+          error.message
+        );
+    }
+
   }
+
+}
 
   return (
 

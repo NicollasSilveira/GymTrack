@@ -62,7 +62,7 @@ export default function TelaCadastro({ navigation }: any) {
     !confirmPassword
   ) {
 
-    console.log(
+    Alert.alert(
       "Campos obrigatórios",
       "Preencha todos os campos."
     );
@@ -71,7 +71,7 @@ export default function TelaCadastro({ navigation }: any) {
   }
 
   if (firstName.trim().length < 3) {
-    console.log(
+    Alert.alert(
       "Nome inválido",
       "O nome deve ter pelo menos 3 caracteres."
     );
@@ -79,7 +79,7 @@ export default function TelaCadastro({ navigation }: any) {
   }
 
   if (lastName.trim().length < 3) {
-    console.log(
+    Alert.alert(
       "Nome inválido",
       "O sobrenome deve ter pelo menos 3 caracteres."
     );
@@ -88,7 +88,7 @@ export default function TelaCadastro({ navigation }: any) {
 
   if (!email.includes("@")) {
 
-    console.log(
+    Alert.alert(
       "E-mail inválido",
       "Digite um e-mail válido."
     );
@@ -98,7 +98,7 @@ export default function TelaCadastro({ navigation }: any) {
 
   if (password.length < 6) {
 
-    console.log(
+    Alert.alert(
       "Senha inválida",
       "A senha deve possuir pelo menos 6 caracteres."
     );
@@ -108,7 +108,7 @@ export default function TelaCadastro({ navigation }: any) {
 
   if (password !== confirmPassword) {
 
-    console.log(
+    Alert.alert(
       "Erro",
       "As senhas não coincidem."
     );
@@ -138,7 +138,7 @@ export default function TelaCadastro({ navigation }: any) {
       }
     );
 
-    console.log(
+    Alert.alert(
       "Sucesso",
       "Conta criada com sucesso!"
     );
@@ -147,9 +147,9 @@ export default function TelaCadastro({ navigation }: any) {
 
   } catch (error: any) {
 
-    console.log(error);
+    Alert.alert(error);
 
-    console.log(
+    Alert.alert(
       "Erro",
       error.message
     );
