@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { db, auth } from "../firebase/config";
 import { Alert } from "react-native";
 
 type Exercicio = {
@@ -77,14 +77,12 @@ export default function MontarTreinoScreen({ route, navigation }: any) {
 
     async function finalizarTreino() {
         try {
-            await addDoc(
-                collection(db, "treinos"),
-                {
-                    tipo,
-                    exercicios,
-                    dataCriacao: new Date(),
-                }
-            );
+            await addDoc(collection(db, "treinos"), {
+            uid: auth.currentUser?.uid,
+            tipo,
+            exercicios,
+            dataCriacao: new Date(),
+            });
 
             Alert.alert(
                 "Sucesso",

@@ -11,6 +11,7 @@ import IniciarTreinoScreen from "../screens/iniciarTreino";
 import CriarTreinoScreen from "../screens/criarTreino";
 import ProgressoScreen from "../screens/progresso";
 import MontarTreinoScreen from "../screens/montarTreino";
+import ExecutarTreinoScreen from "../screens/executarTreino";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,11 @@ export default function AppRoutes() {
         <Stack.Screen
           name="MontarTreino"
           component={MontarTreinoScreen}
+        />
+
+        <Stack.Screen
+          name="ExecutarTreino"
+          component={ExecutarTreinoScreen}
         />
 
       </Stack.Navigator>

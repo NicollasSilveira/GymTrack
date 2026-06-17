@@ -26,7 +26,7 @@ export default function HomeScreen({ navigation }: any) {
           Iniciar Treino
         </Text>
       </TouchableOpacity>
-
+ 
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("CriarTreino")}

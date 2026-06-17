@@ -7,12 +7,82 @@ import {
   Image,
 } from "react-native";
 
-export default function IniciarTreinoScreen({ navigation }: any) {
-  return (
+import { useEffect, useState } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
-        <Text style={styles.container}>
-          Tela Treino
-        </Text>
+import { db, auth } from "../firebase/config";
+
+
+export default function IniciarTreinoScreen({ navigation }: any) {
+
+  const [treinos, setTreinos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    carregarTreinos();
+  }, []);
+
+  async function carregarTreinos() {
+    try {
+      const q = query(
+        collection(db, "treinos"),
+        where(
+          "uid",
+          "==",
+          auth.currentUser?.uid
+        )
+      );
+
+      const snapshot = await getDocs(q);
+
+      const lista: any[] = [];
+
+      snapshot.forEach((doc) => {
+        lista.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
+      setTreinos(lista);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
+  }
+
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>
+        Meus Treinos
+      </Text>
+
+      {treinos.map((treino) => (
+        <TouchableOpacity
+          key={treino.id}
+          style={styles.card}
+          onPress={() =>
+            navigation.navigate(
+              "ExecutarTreino",
+              {
+                treino,
+              }
+            )
+          }
+        >
+          <Text style={styles.cardTitle}>
+            Treino {treino.tipo}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
   );
 }
 
@@ -55,5 +125,19 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
+  },
+
+  card: {
+    backgroundColor: "#1e1e1e",
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 20,
+  },
+
+  cardTitle: {
+    color: "#fff",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
 });
