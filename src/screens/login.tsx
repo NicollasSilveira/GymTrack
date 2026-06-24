@@ -120,14 +120,20 @@ export default function LoginScreen({ navigation }: any) {
 
       <Image
         source={require("../../assets/images/arm.png")}
-        style={stylesDark.logo}
+        style={darkMode
+          ? stylesDark.logo
+          : stylesLight.logo}
       />
 
-      <Text style={[stylesDark.title, {}]}>
+      <Text style={[darkMode
+          ? stylesDark.title
+          : stylesLight.title, {}]}>
         GymTrack
       </Text>
 
-      <Text style={stylesDark.subtitle}>
+      <Text style={darkMode
+          ? stylesDark.subtitle
+          : stylesLight.subtitle}>
         Acompanhe sua evolução
       </Text>
 
@@ -163,7 +169,9 @@ export default function LoginScreen({ navigation }: any) {
         onPress={() => navigation.navigate("Register")}
       >
 
-        <Text style={stylesDark.registerText}>
+        <Text style={darkMode
+          ? stylesDark.registerText
+          : stylesLight.registerText}>
           Não possui conta? Cadastre-se
         </Text>
 
@@ -266,7 +274,7 @@ const stylesLight = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#e2e2e2",
     justifyContent: "center",
     padding: 25,
   },
@@ -280,14 +288,14 @@ const stylesLight = StyleSheet.create({
   },
 
   title: {
-    color: "#fff",
+    color: "#000000",
     fontSize: 34,
     fontWeight: "bold",
     textAlign: "center",
   },
 
   subtitle: {
-    color: "#888",
+    color: "#000000",
     textAlign: "center",
     marginBottom: 40,
     marginTop: 10,
@@ -295,9 +303,9 @@ const stylesLight = StyleSheet.create({
   },
 
   input: {
-    backgroundColor: "#1e1e1e",
+    backgroundColor: "#ffffff",
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: "#000000",
     borderRadius: 12,
     padding: 15,
     color: "#fff",
@@ -313,13 +321,13 @@ const stylesLight = StyleSheet.create({
   },
 
   buttonText: {
-    color: "#fff",
+    color: "#ffffff",
     fontSize: 16,
     fontWeight: "bold",
   },
 
   registerText: {
-    color: "#888",
+    color: "#000000",
     textAlign: "center",
     marginTop: 25,
   },
