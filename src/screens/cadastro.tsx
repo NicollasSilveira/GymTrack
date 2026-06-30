@@ -6,9 +6,17 @@ import {
 } from "firebase/auth";
 
 import {
+  useContext
+} from "react";
+
+import {
   doc,
   setDoc,
 } from "firebase/firestore";
+
+import {
+  ThemeContext
+} from "../styles/contextoTema";
 
 import { auth, db } from "../firebase/config";
 
@@ -34,6 +42,14 @@ export default function TelaCadastro({ navigation }: any) {
   const [password, setPassword] = useState("");
 
   const [confirmPassword, setConfirmPassword] = useState("");
+
+    const {
+      darkMode,
+      setDarkMode,
+      fontSize,
+      setFontSize,
+    } = useContext(ThemeContext);
+
 
   function formatPhone(text: string) {
 
@@ -160,8 +176,11 @@ export default function TelaCadastro({ navigation }: any) {
 
   return (
 
+
     <ScrollView
-      style={styles.container}
+      style={darkMode
+          ? stylesDark.container
+          : stylesLight.container}
       contentContainerStyle={{
         padding: 25,
         paddingVertical: 60,
@@ -169,18 +188,38 @@ export default function TelaCadastro({ navigation }: any) {
       showsVerticalScrollIndicator={false}
     >
 
-      <Text style={styles.title}>
+      <TouchableOpacity
+              style={stylesDark.settingButton}
+              onPress={() =>
+                setDarkMode(!darkMode)
+              }
+            >
+              <Text>
+                {darkMode
+                  ? "Tema Claro"
+                  : "Tema Escuro"}
+              </Text>
+            </TouchableOpacity>
+
+
+      <Text style={darkMode
+          ? stylesDark.title
+          : stylesLight.title}>
         Criar Conta
       </Text>
 
-      <Text style={styles.subtitle}>
+      <Text style={darkMode
+          ? stylesDark.subtitle
+          : stylesLight.subtitle}>
         Crie sua conta para acompanhar sua evolução
       </Text>
 
       <TextInput
         placeholder="Nome"
         placeholderTextColor="#777"
-        style={styles.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         value={firstName}
         onChangeText={(text) => {
           const valorFormatado = text.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
@@ -191,7 +230,9 @@ export default function TelaCadastro({ navigation }: any) {
       <TextInput
         placeholder="Sobrenome"
         placeholderTextColor="#777"
-        style={styles.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         value={lastName}
         onChangeText={(text) => {
           const valorFormatado = text.replace(/[^a-zA-ZÀ-ÿ\s]/sg, "");
@@ -202,7 +243,9 @@ export default function TelaCadastro({ navigation }: any) {
       <TextInput
         placeholder="E-mail"
         placeholderTextColor="#777"
-        style={styles.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
@@ -212,7 +255,9 @@ export default function TelaCadastro({ navigation }: any) {
       <TextInput
         placeholder="Telefone"
         placeholderTextColor="#777"
-        style={styles.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         keyboardType="phone-pad"
         value={phone}
         maxLength={14}
@@ -225,7 +270,9 @@ export default function TelaCadastro({ navigation }: any) {
         placeholder="Senha"
         placeholderTextColor="#777"
         secureTextEntry
-        style={styles.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         value={password}
         onChangeText={setPassword}
       />
@@ -234,17 +281,19 @@ export default function TelaCadastro({ navigation }: any) {
         placeholder="Confirmar senha"
         placeholderTextColor="#777"
         secureTextEntry
-        style={styles.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={stylesDark.button}
         onPress={handleRegister}
       >
 
-        <Text style={styles.buttonText}>
+        <Text style={stylesDark.buttonText}>
           Criar Conta
         </Text>
 
@@ -254,7 +303,7 @@ export default function TelaCadastro({ navigation }: any) {
         onPress={() => navigation.navigate("Login")}
       >
 
-        <Text style={styles.loginText}>
+        <Text style={stylesDark.loginText}>
           Já possui conta? Entrar
         </Text>
 
@@ -266,7 +315,7 @@ export default function TelaCadastro({ navigation }: any) {
 
 }
 
-const styles = StyleSheet.create({
+const stylesDark = StyleSheet.create({
 
   container: {
     flex: 1,
@@ -317,4 +366,73 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
 
+    settingButton: {
+    backgroundColor: "#696969",
+    color: '#ffffff',
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+});
+
+const stylesLight = StyleSheet.create({
+
+  container: {
+    flex: 1,
+    backgroundColor: "#e2e2e2",
+  },
+
+  title: {
+    color: "#000000",
+    fontSize: 34,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+
+  subtitle: {
+    color: "#2c2c2c",
+    fontSize: 16,
+    marginBottom: 35,
+  },
+
+  input: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#000000",
+    borderRadius: 12,
+    padding: 15,
+    color: "#000000",
+    marginBottom: 15,
+  },
+
+  button: {
+    backgroundColor: "#dc2626",
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 10,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  loginText: {
+    color: "#888",
+    textAlign: "center",
+    marginTop: 25,
+    marginBottom: 40,
+  },
+
+    settingButton: {
+    backgroundColor: "#696969",
+    color: '#ffffff',
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 10,
+  },
 });

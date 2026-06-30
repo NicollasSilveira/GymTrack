@@ -113,8 +113,8 @@ export default function LoginScreen({ navigation }: any) {
       >
         <Text>
           {darkMode
-            ? "☀️ Tema Claro"
-            : "🌙 Tema Escuro"}
+            ? "Tema Claro"
+            : "Tema Escuro"}
         </Text>
       </TouchableOpacity>
 
@@ -128,7 +128,7 @@ export default function LoginScreen({ navigation }: any) {
       <Text style={[darkMode
           ? stylesDark.title
           : stylesLight.title, {}]}>
-        GymTrack
+        ADP Training
       </Text>
 
       <Text style={darkMode
@@ -140,7 +140,9 @@ export default function LoginScreen({ navigation }: any) {
       <TextInput
         placeholder="E-mail"
         placeholderTextColor="#777"
-        style={stylesDark.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         value={email}
         onChangeText={setEmail}
       />
@@ -149,7 +151,9 @@ export default function LoginScreen({ navigation }: any) {
         placeholder="Senha"
         placeholderTextColor="#777"
         secureTextEntry
-        style={stylesDark.input}
+        style={darkMode
+          ? stylesDark.input
+          : stylesLight.input}
         value={password}
         onChangeText={setPassword}
       />
@@ -308,7 +312,7 @@ const stylesLight = StyleSheet.create({
     borderColor: "#000000",
     borderRadius: 12,
     padding: 15,
-    color: "#fff",
+    color: "#000000",
     marginBottom: 15,
   },
 
