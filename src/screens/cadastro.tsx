@@ -2,6 +2,13 @@ import { useState } from "react";
 import { Alert } from "react-native";
 
 import {
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 
@@ -13,7 +20,7 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
-
+ 
 import {
   ThemeContext
 } from "../styles/contextoTema";
@@ -28,6 +35,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+
 
 export default function TelaCadastro({ navigation }: any) {
 
@@ -177,16 +185,22 @@ export default function TelaCadastro({ navigation }: any) {
   return (
 
 
-    <ScrollView
-      style={darkMode
-          ? stylesDark.container
-          : stylesLight.container}
-      contentContainerStyle={{
-        padding: 25,
-        paddingVertical: 60,
-      }}
-      showsVerticalScrollIndicator={false}
+   <SafeAreaView style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={20}
     >
+      <ScrollView
+        style={darkMode ? stylesDark.container : stylesLight.container}
+        contentContainerStyle={{
+          padding: 25,
+          paddingVertical: 60,
+          flexGrow: 1,
+        }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
 
       <TouchableOpacity
               style={stylesDark.settingButton}
@@ -303,13 +317,16 @@ export default function TelaCadastro({ navigation }: any) {
         onPress={() => navigation.navigate("Login")}
       >
 
-        <Text style={stylesDark.loginText}>
+        <Text style={darkMode
+          ? stylesDark.loginText
+          : stylesLight.loginText}>
           Já possui conta? Entrar
         </Text>
 
       </TouchableOpacity>
-
-    </ScrollView>
+      </ScrollView>
+          </KeyboardAvoidingView>
+  </SafeAreaView>
 
   );
 
@@ -421,7 +438,7 @@ const stylesLight = StyleSheet.create({
   },
 
   loginText: {
-    color: "#888",
+    color: "#3a3a3a",
     textAlign: "center",
     marginTop: 25,
     marginBottom: 40,

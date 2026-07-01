@@ -2,6 +2,13 @@ import { useState } from "react";
 import { Alert } from "react-native";
 
 import {
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import {
   useContext
 } from "react";
 
@@ -16,6 +23,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  ScrollView,
 } from "react-native";
 
 import {
@@ -97,13 +105,32 @@ export default function LoginScreen({ navigation }: any) {
 
   return (
 
-    <View
-      style={
-        darkMode
-          ? stylesDark.container
-          : stylesLight.container
-      }
+<SafeAreaView style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={20}
     >
+      <ScrollView
+  style={{
+    flex: 1,
+    backgroundColor: darkMode ? "#121212" : "#e2e2e2",
+  }}
+  contentContainerStyle={{
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 25,
+    paddingVertical: 60,
+  }}
+>
+        <View
+          style={
+            darkMode
+              ? stylesDark.container
+              : stylesLight.container
+          }
+        >
 
       <TouchableOpacity
         style={stylesDark.settingButton}
@@ -181,8 +208,11 @@ export default function LoginScreen({ navigation }: any) {
 
       </TouchableOpacity>
 
-    </View>
-
+  
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  </SafeAreaView>
   );
 
 }
